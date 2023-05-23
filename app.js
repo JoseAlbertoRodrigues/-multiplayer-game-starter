@@ -15,9 +15,19 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
 })
 
+const players = {}
+
 io.on('connection', (socket) => {
-  console.log('a user connected');
-});
+  console.log('a user connected')
+  players[socket.id] = {
+    x: 100,
+    y: 100
+  }
+
+  io.emit('updatePlayers', players)
+
+  console.log(players)
+})
 
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
