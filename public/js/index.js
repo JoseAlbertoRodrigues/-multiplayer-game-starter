@@ -23,6 +23,12 @@ socket.on('updatePlayers', (backendPlayers) => {
     }
   }
 
+  for (const id in players) {
+    if (!backendPlayers[id]) {
+      delete players[id]
+    }
+  }
+
   console.log(players)
 
   // console.log(backendPlayers)
