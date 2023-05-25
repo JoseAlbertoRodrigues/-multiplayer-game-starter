@@ -11,27 +11,32 @@ canvas.height = innerHeight
 const x = canvas.width / 2
 const y = canvas.height / 2
 
-const player = new Player(x, y, 10, 'white')
-const players = {}
+const player = new Player(x, y, 10, 'red') // depois tirar essa linha
+const frontEndPlayers = {}
 
-socket.on('updatePlayers', (backendPlayers) => {
-  for (const id in backendPlayers) {
-    const backendPlayer = backendPlayers[id]
+socket.on('updatePlayers', (backEndPlayers) => {
+  for (const id in backEndPlayers) {
+    const backEndPlayer = backEndPlayers[id]
 
-    if (!players[id]) {
-      players[id] = new Player(backendPlayer.x, backendPlayer.y, 10, 'white')
+    if (!frontEndPlayers[id]) {
+      frontEndPlayers[id] = new Player({
+        x: backEndPlayer.x,
+        y: backEndPlayer.y,
+        radius: 10,
+        color: 'hsl(0, 100%, 50%)'
+      })
     }
   }
 
-  for (const id in players) {
-    if (!backendPlayers[id]) {
-      delete players[id]
+  for (const id in frontEndPlayers) {
+    if (!backEndPlayers[id]) {
+      delete frontEndPlayers[id]
     }
   }
 
-  console.log(players)
+  // console.log(frontEndPlayers)
 
-  // console.log(backendPlayers)
+  // console.log(backEndPlayers)
 })
 
 const projectiles = []
@@ -74,9 +79,9 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height)
 
   // player.draw()
-  for (const id in players) {
-    const player = players[id]
-    player.draw()
+  for (const id in frontEndPlayers) {
+    const frontEndPlayer = frontEndPlayers[id]
+    frontEndPlayer.draw()
   }
 
   for (let index = particles.length - 1; index >= 0; index--) {
