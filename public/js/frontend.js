@@ -27,6 +27,10 @@ socket.on('updatePlayers', (backEndPlayers) => {
         radius: 10,
         color: backEndPlayer.color
       })
+    } else {
+      // if a player already exists
+      frontEndPlayers[id].x = backEndPlayer.x
+      frontEndPlayers[id].y = backEndPlayer.y
     }
   }
 
@@ -173,3 +177,26 @@ function animate() {
 
 animate()
 spawnEnemies()
+
+window.addEventListener('keydown', (event) => {
+  if(!frontEndPlayers[socket.id]) return
+
+  switch (event.code) {
+    case 'KeyW':
+      // frontEndPlayers[socket.id].y -= 5
+      socket.emit('keydown', 'KeyW')
+      break
+    case 'KeyA':
+      // frontEndPlayers[socket.id].x -= 5
+      socket.emit('keydown', 'KeyA')
+      break
+    case 'KeyS':
+      // frontEndPlayers[socket.id].y += 5
+      socket.emit('keydown', 'KeyS')
+      break
+    case 'KeyD':
+      // frontEndPlayers[socket.id].x += 5
+      socket.emit('keydown', 'KeyD')
+      break
+  }
+})
